@@ -3,7 +3,6 @@ package com.example.demo.Entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
 @Entity
 @Table(name = "cliente")
 @Getter
@@ -17,7 +16,7 @@ public class Cliente {
     private Long cliente_id;
 
     @Column(nullable = false)
-    private String nome_cliente;
+    private String nome;
 
     @Column(nullable = false, unique = true)
     private String email;
