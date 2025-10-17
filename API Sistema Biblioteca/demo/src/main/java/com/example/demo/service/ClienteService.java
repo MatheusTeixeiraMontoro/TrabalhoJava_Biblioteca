@@ -42,4 +42,16 @@ public class ClienteService {
                 .collect(Collectors.toList());
     }
 
+    public ClienteDTO consultaClinteById(Long id){
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario nao encontrado"));
+
+        return new ClienteDTO(
+                cliente.getNome(),
+                cliente.getEndereco(),
+                cliente.getTelefone(),
+                cliente.getEmail()
+        );
+    }
+
 }

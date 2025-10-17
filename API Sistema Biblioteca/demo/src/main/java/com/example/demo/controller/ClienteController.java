@@ -5,6 +5,7 @@ import com.example.demo.dto.ClienteDTO;
 import com.example.demo.repository.IClienteRepository;
 import com.example.demo.service.ClienteService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity cadastrarCliente(@RequestBody ClienteDTO clienteDTO) {
         clienteService.salvarCliente(clienteDTO);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(clienteDTO);
     }
 
     @GetMapping
@@ -28,4 +29,8 @@ public class ClienteController {
         return clienteService.consultaCliente();
     }
 
+    @GetMapping("/{id}")
+    public ClienteDTO consultarClientePorId(@PathVariable Long id){
+        return clienteService.consultaClinteById(id);
+    }
 }
