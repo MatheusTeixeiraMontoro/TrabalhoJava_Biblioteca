@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class ClienteService {
@@ -24,6 +27,19 @@ public class ClienteService {
 
         clienteRepository.save(cliente);
         return ResponseEntity.ok().build();
+    }
+
+    public List<ClienteDTO> consultaCliente(){
+
+        List<Cliente> clientes = clienteRepository.findAll();
+
+        return clientes.stream()
+                .map(cliente -> new ClienteDTO(
+                        cliente.getNome(),
+                        cliente.getEmail(),
+                        cliente.getTelefone(),
+                        cliente.getEndereco()))
+                .collect(Collectors.toList());
     }
 
 }
