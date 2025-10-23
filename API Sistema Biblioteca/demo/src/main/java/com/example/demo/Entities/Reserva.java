@@ -28,6 +28,9 @@ public class Reserva {
     @Column(name = "data_reserva", nullable = false)
     private LocalDateTime dataReserva;
 
+    @Column(name = "data_devolucao", nullable = false)
+    private LocalDateTime dataDevolucao;
+
     @Column(nullable = false)
     private String status;
 
