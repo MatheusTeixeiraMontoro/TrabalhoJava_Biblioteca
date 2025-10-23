@@ -6,9 +6,9 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @Table(name = "multa")
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Multa {
