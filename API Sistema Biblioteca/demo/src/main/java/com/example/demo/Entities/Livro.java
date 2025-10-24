@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-@Data
+import java.util.List;
+
 @Entity
 @Table(name = "livro")
 @Getter
@@ -40,4 +41,6 @@ public class Livro {
     @Column(nullable = false)
     private String categoria;
 
+    @OneToMany(mappedBy = "livro")
+    private List<Emprestimo> livrosEmprestados;
 }

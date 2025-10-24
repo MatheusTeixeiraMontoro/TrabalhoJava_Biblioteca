@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @Table(name = "emprestimo")
 @Getter
@@ -18,13 +17,13 @@ public class Emprestimo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long emprestimo_id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
-    private Cliente clienteId;
+    private Cliente cliente;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "livro_id", nullable = false)
-    private Livro livroId;
+    private Livro livro;
 
     @Column(name = "data_emprestimo", nullable = false)
     private LocalDateTime dataEmprestimo;
@@ -32,7 +31,7 @@ public class Emprestimo {
     @Column(name = "data_devolucao")
     private LocalDateTime dataDevolucao;
 
-    @Column(length = 30, nullable = false)
-    private String status;
+    @Column
+    private boolean status;
 
 }
