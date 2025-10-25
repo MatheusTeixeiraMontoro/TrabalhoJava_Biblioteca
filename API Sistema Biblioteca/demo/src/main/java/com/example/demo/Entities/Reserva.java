@@ -31,6 +31,6 @@ public class Reserva {
     private LocalDateTime dataDevolucao;
 
     @Column(nullable = false)
-    private String status;
+    private boolean status;
 
 }
