@@ -44,7 +44,7 @@ public class ClienteService {
 
     public ClienteDTO consultaClinteById(Long id){
         Cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Usuario nao encontrado"));
+                .orElseThrow(() -> new IllegalArgumentException("Cliente nao encontrado"));
 
         return new ClienteDTO(
                 cliente.getNome(),
@@ -71,6 +71,13 @@ public class ClienteService {
                 clienteAtualizado.getTelefone(),
                 clienteAtualizado.getEndereco()
         );
+    }
+
+    public void deletarCliente(Long id) {
+        clienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado para o ID: " + id));
+
+        clienteRepository.deleteById(id);
     }
 
 }

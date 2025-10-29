@@ -39,4 +39,10 @@ public class ClienteController {
         ClienteDTO clienteAtualizado = clienteService.atualizarCliente(id, clienteDTO);
         return ResponseEntity.ok(clienteAtualizado);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
+        clienteService.deletarCliente(id);
+        return ResponseEntity.noContent().build();
+    }
 }
