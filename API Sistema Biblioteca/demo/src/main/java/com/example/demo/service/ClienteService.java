@@ -44,7 +44,7 @@ public class ClienteService {
 
     public ClienteDTO consultaClinteById(Long id){
         Cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Usuario nao encontrado"));
+                .orElseThrow(() -> new IllegalArgumentException("Cliente nao encontrado"));
 
         return new ClienteDTO(
                 cliente.getNome(),
@@ -52,6 +52,32 @@ public class ClienteService {
                 cliente.getTelefone(),
                 cliente.getEmail()
         );
+    }
+
+    public ClienteDTO atualizarCliente(Long id, ClienteDTO clienteDTO){
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado para o ID: " + id));
+
+        cliente.setNome(clienteDTO.nome());
+        cliente.setEmail(clienteDTO.email());
+        cliente.setTelefone(clienteDTO.telefone());
+        cliente.setEndereco(clienteDTO.endereco());
+
+        Cliente clienteAtualizado = clienteRepository.save(cliente);
+
+        return new ClienteDTO(
+                clienteAtualizado.getNome(),
+                clienteAtualizado.getEmail(),
+                clienteAtualizado.getTelefone(),
+                clienteAtualizado.getEndereco()
+        );
+    }
+
+    public void deletarCliente(Long id) {
+        clienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado para o ID: " + id));
+
+        clienteRepository.deleteById(id);
     }
 
 }
