@@ -33,4 +33,10 @@ public class ClienteController {
     public ClienteDTO consultarClientePorId(@PathVariable Long id){
         return clienteService.consultaClinteById(id);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ClienteDTO> atualizarCliente(@PathVariable Long id, @RequestBody ClienteDTO clienteDTO){
+        ClienteDTO clienteAtualizado = clienteService.atualizarCliente(id, clienteDTO);
+        return ResponseEntity.ok(clienteAtualizado);
+    }
 }

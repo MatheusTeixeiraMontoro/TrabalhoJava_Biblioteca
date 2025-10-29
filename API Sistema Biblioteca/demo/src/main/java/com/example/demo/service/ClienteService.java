@@ -54,4 +54,23 @@ public class ClienteService {
         );
     }
 
+    public ClienteDTO atualizarCliente(Long id, ClienteDTO clienteDTO){
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado para o ID: " + id));
+
+        cliente.setNome(clienteDTO.nome());
+        cliente.setEmail(clienteDTO.email());
+        cliente.setTelefone(clienteDTO.telefone());
+        cliente.setEndereco(clienteDTO.endereco());
+
+        Cliente clienteAtualizado = clienteRepository.save(cliente);
+
+        return new ClienteDTO(
+                clienteAtualizado.getNome(),
+                clienteAtualizado.getEmail(),
+                clienteAtualizado.getTelefone(),
+                clienteAtualizado.getEndereco()
+        );
+    }
+
 }
