@@ -3,6 +3,8 @@ package com.example.demo.Entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "cliente")
 @Getter
@@ -27,4 +29,6 @@ public class Cliente {
     @Column
     private String endereco;
 
+    @OneToMany(mappedBy = "cliente")
+    private List<Reserva> reserva;
 }

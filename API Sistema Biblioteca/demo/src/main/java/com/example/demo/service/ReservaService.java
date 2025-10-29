@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,7 +33,7 @@ public class ReservaService {
     @Autowired
     private ILivroRepository livroRepository;
 
-
+@Transactional
     public ResponseEntity<String> criarReserva(ReservaDTO reservaDTO) {
         Cliente cliente = clienteRepository.findById(reservaDTO.clienteId())
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
@@ -43,8 +44,6 @@ public class ReservaService {
 
         reserva.setCliente(cliente);
         reserva.setLivro(livro);
-
-
         reserva.setDataReserva(LocalDateTime.now());
         reserva.setStatus(true);
         reserva.setDataDevolucao(reservaDTO.dataDevolucao());

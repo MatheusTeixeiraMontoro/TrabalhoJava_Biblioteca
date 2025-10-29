@@ -2,15 +2,15 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.ClienteDTO;
 import com.example.demo.dto.ReservaDTO;
+import com.example.demo.dto.ReservaResponseDTO;
 import com.example.demo.service.ClienteService;
 import com.example.demo.service.ReservaService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -21,8 +21,13 @@ public class ReservaController {
     private ReservaService reservaService;
 
     @PostMapping
-    public ResponseEntity cadastrarReservas(@RequestBody ReservaDTO reservaDTO) {
-        reservaService.criarReserva(reservaDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservaDTO);
+=    public ResponseEntity cadastrarReservas(@RequestBody ReservaDTO reservaDTO) {
+
+        return reservaService.criarReserva(reservaDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ReservaResponseDTO>> listarReservas() {
+        return ResponseEntity.ok().body(reservaService.consultaListaReserva());
     }
 }
