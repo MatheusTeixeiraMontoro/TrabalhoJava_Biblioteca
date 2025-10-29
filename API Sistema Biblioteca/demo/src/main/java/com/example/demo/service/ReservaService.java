@@ -7,6 +7,7 @@ import com.example.demo.dto.ClienteDTO;
 import com.example.demo.dto.ReservaDTO;
 import com.example.demo.dto.ReservaResponseDTO;
 import com.example.demo.dto.LivroDTO;
+
 import com.example.demo.repository.IReservaRepository;
 import com.example.demo.repository.IClienteRepository;
 import com.example.demo.repository.ILivroRepository;
@@ -33,7 +34,8 @@ public class ReservaService {
     @Autowired
     private ILivroRepository livroRepository;
 
-@Transactional
+
+    @Transactional
     public ResponseEntity<String> criarReserva(ReservaDTO reservaDTO) {
         Cliente cliente = clienteRepository.findById(reservaDTO.clienteId())
                 .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
@@ -52,11 +54,13 @@ public class ReservaService {
         return ResponseEntity.ok("Reserva criada com sucesso!");
     }
 
+
+    @Transactional
     public List<ReservaResponseDTO> consultaListaReserva(){
         List<Reserva> reservaResponse = reservaRepository.findAll();
         return reservaResponse
                 .stream()
-                .map(c-> new ReservaResponseDTO(
+                .map(c-> new ReservaResponseDTO( // Lógica de mapeamento DTO
                         c.getReserva_id(),
                         c.isStatus(),
                         c.getDataReserva(),
@@ -74,9 +78,46 @@ public class ReservaService {
                                 c.getLivro().getQuantidade(),
                                 c.getLivro().getCategoria()
                         )
-                        // ---------------------
-
                 ))
                 .collect(Collectors.toList());
     }
+
+
+    @Transactional
+    public ReservaResponseDTO buscarReservaById(Long id) {
+        Reserva c = reservaRepository.findById(id) // 'c' é a reserva encontrada
+                .orElseThrow(() -> new IllegalArgumentException("Reserva não encontrada com ID: " + id));
+
+        return new ReservaResponseDTO(
+                c.getReserva_id(),
+                c.isStatus(),
+                c.getDataReserva(),
+                c.getDataDevolucao(),
+                new ClienteDTO(
+                        c.getCliente().getNome(),
+                        c.getCliente().getEmail(),
+                        c.getCliente().getTelefone(),
+                        c.getCliente().getEndereco()
+                ),
+                new LivroDTO(
+                        c.getLivro().getTitulo(),
+                        c.getLivro().getAutor(),
+                        c.getLivro().getQuantidade(),
+                        c.getLivro().getCategoria()
+                )
+        );
+    }
+
+
+    @Transactional
+    public ResponseEntity<String> excluirReserva(Long id) {
+        if (!reservaRepository.existsById(id)) {
+            throw new IllegalArgumentException("Reserva não encontrada com ID: " + id);
+        }
+
+        reservaRepository.deleteById(id);
+        return ResponseEntity.ok("Reserva excluída com sucesso!");
+    }
+
+
 }
