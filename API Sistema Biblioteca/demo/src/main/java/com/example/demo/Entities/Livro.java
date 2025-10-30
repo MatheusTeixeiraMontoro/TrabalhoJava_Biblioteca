@@ -43,4 +43,7 @@ public class Livro {
 
     @OneToMany(mappedBy = "livro")
     private List<Emprestimo> livrosEmprestados;
+
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Manutencao> manutencoes;
 }
