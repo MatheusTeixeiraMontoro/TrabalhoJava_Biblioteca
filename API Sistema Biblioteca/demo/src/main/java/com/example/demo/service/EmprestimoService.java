@@ -70,6 +70,7 @@ public class EmprestimoService {
                         new LivroDTO(
                                 c.getLivro().getTitulo(),
                                 c.getLivro().getAutor(),
+                                c.getLivro().getIsbn(),
                                 c.getLivro().getQuantidade(),
                                 c.getLivro().getCategoria()
                         )
