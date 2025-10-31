@@ -27,7 +27,7 @@ public class LivroService {
     }
 
     public List<LivroDTO> listarTodosOsLivros() {
-        // Busca todos os livros do banco de dados
+
         List<Livro> livros = livroRepository.findAll();
 
         // Converte a lista de entidades Livro para uma lista de LivroDTO
