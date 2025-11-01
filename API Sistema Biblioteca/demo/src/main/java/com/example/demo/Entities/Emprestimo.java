@@ -28,10 +28,14 @@ public class Emprestimo {
     @Column(name = "data_emprestimo", nullable = false)
     private LocalDateTime dataEmprestimo;
 
+    // CAMPO QUE ESTAVA FALTANDO - AGORA CORRIGIDO
+    @Column(name = "data_devolucao_prevista", nullable = false)
+    private LocalDateTime dataDevolucaoPrevista;
+
     @Column(name = "data_devolucao")
-    private LocalDateTime dataDevolucao;
+    private LocalDateTime dataDevolucao; // Data da devolução real
 
     @Column
-    private boolean status;
+    private boolean status; // true = Ativo, false = Devolvido
 
 }
