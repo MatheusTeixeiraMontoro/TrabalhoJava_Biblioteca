@@ -16,18 +16,20 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reserva_id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "cliente_id", nullable = false)
-    private Cliente clienteId;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "livro_id", nullable = false)
-    private Livro livroId;
-
     @Column(name = "data_reserva", nullable = false)
     private LocalDateTime dataReserva;
 
-    @Column(nullable = false)
-    private String status;
+    @Column(name = "data_devolucao")
+    private LocalDateTime dataDevolucao;
 
+    @Column(name = "status")
+    private boolean status;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "livro_id")
+    private Livro livro;
 }

@@ -103,10 +103,31 @@ public class EmprestimoService {
                 .collect(Collectors.toList());
     }
 
+    public List<EmprestimoResponseDTO> consultaListaEmprestimo(){
+        List<Emprestimo> emprestimoResponse = emprestimoRepository.findAll();
+        return emprestimoResponse
+                .stream()
+                .map(c-> new EmprestimoResponseDTO(
+                        c.getEmprestimo_id(),
+                        c.isStatus(),
+                        c.getDataEmprestimo(),
+                        c.getDataDevolucao(),
+                        new ClienteDTO(
+                                c.getCliente().getNome(),
+                                c.getCliente().getEmail(),
+                                c.getCliente().getTelefone(),
+                                c.getCliente().getEndereco()
+                        ),
+                        new LivroDTO(
+                                c.getLivro().getLivro_id(),
+                                c.getLivro().getTitulo(),
+                                c.getLivro().getAutor(),
+                                c.getLivro().getIsbn(),
+                                c.getLivro().getQuantidade(),
+                                c.getLivro().getCategoria()
+                        )
 
-    public List<EmprestimoResponseDTO> consultarEmprestimosAtrasados() {
-        return emprestimoRepository.findEmprestimosAtrasados(LocalDateTime.now()).stream()
-                .map(this::toResponseDTO)
+                ))
                 .collect(Collectors.toList());
     }
 
