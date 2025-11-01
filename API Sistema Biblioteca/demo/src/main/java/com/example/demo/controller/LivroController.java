@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.Entities.Livro;
 import com.example.demo.dto.LivroDTO;
 import com.example.demo.service.LivroService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,38 @@ public class LivroController {
     public ResponseEntity<List<LivroDTO>> listarLivros() {
         List<LivroDTO> todosOsLivros = livroService.listarTodosOsLivros();
         return ResponseEntity.ok(todosOsLivros);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<LivroDTO> buscarLivroPorId(@PathVariable Long id) {
+        // @PathVariable "id" pega o valor da URL (ex: /api/livros/1)
+        LivroDTO livro = livroService.buscarLivroPorId(id);
+
+        return ResponseEntity.ok(livro);
+    }
+
+    @GetMapping("/disponiveis")
+    public ResponseEntity<List<LivroDTO>> listarLivrosDisponiveis() {
+        List<LivroDTO> livrosDisponiveis = livroService.listarLivrosDisponiveis();
+
+        return ResponseEntity.ok(livrosDisponiveis);
+    }
+
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<LivroDTO> atualizarLivro(@PathVariable Long id, @Valid @RequestBody LivroDTO livroDTO) {
+        LivroDTO livroAtualizado = livroService.atualizarLivro(id, livroDTO);
+
+        return ResponseEntity.ok(livroAtualizado);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirLivro(@PathVariable Long id) {
+        livroService.excluirLivro(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }

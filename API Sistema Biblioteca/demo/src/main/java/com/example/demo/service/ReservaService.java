@@ -3,17 +3,14 @@ package com.example.demo.service;
 import com.example.demo.Entities.Reserva;
 import com.example.demo.Entities.Cliente;
 import com.example.demo.Entities.Livro;
-import com.example.demo.dto.ClienteDTO;
 import com.example.demo.dto.ReservaDTO;
 import com.example.demo.dto.ReservaResponseDTO;
-import com.example.demo.dto.LivroDTO;
-
+import com.example.demo.mapper.ReservaMapper; // 1. IMPORTAR O MAPPER
 import com.example.demo.repository.IReservaRepository;
 import com.example.demo.repository.IClienteRepository;
 import com.example.demo.repository.ILivroRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,101 +19,99 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@AllArgsConstructor // O Lombok injetará todos os 'final'
 public class ReservaService {
 
-    @Autowired
-    private IReservaRepository reservaRepository;
-
-    @Autowired
-    private IClienteRepository clienteRepository;
-
-    @Autowired
-    private ILivroRepository livroRepository;
-
+    private final IReservaRepository reservaRepository;
+    private final IClienteRepository clienteRepository;
+    private final ILivroRepository livroRepository;
+    private final ReservaMapper reservaMapper; // 2. INJETAR O MAPPER
 
     @Transactional
-    public ResponseEntity<String> criarReserva(ReservaDTO reservaDTO) {
+    public ReservaResponseDTO criarReserva(ReservaDTO reservaDTO) {
         Cliente cliente = clienteRepository.findById(reservaDTO.clienteId())
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com ID: " + reservaDTO.clienteId()));
+
         Livro livro = livroRepository.findById(reservaDTO.livroId())
-                .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Livro não encontrado com ID: " + reservaDTO.livroId()));
+
+        if (livro.getQuantidade() <= 0) {
+            throw new IllegalArgumentException("Livro '" + livro.getTitulo() + "' está esgotado. Não é possível reservar.");
+        }
+
+        livro.setQuantidade(livro.getQuantidade() - 1);
+        livroRepository.save(livro);
 
         Reserva reserva = new Reserva();
-
         reserva.setCliente(cliente);
         reserva.setLivro(livro);
         reserva.setDataReserva(LocalDateTime.now());
         reserva.setStatus(true);
-        reserva.setDataDevolucao(reservaDTO.dataDevolucao());
+        reserva.setDataDevolucao(reservaDTO.dataDevolucao()); // Mantém a data de devolução do DTO
 
-        reservaRepository.save(reserva);
-        return ResponseEntity.ok("Reserva criada com sucesso!");
+        Reserva reservaSalva = reservaRepository.save(reserva);
+
+        // 3. USAR O MAPPER
+        return reservaMapper.toResponseDTO(reservaSalva);
     }
 
-
-    @Transactional
-    public List<ReservaResponseDTO> consultaListaReserva(){
-        List<Reserva> reservaResponse = reservaRepository.findAll();
-        return reservaResponse
+    @Transactional(readOnly = true)
+    public List<ReservaResponseDTO> listarTodasReservas() {
+        return reservaRepository.findAll()
                 .stream()
-                .map(c-> new ReservaResponseDTO( // Lógica de mapeamento DTO
-                        c.getReserva_id(),
-                        c.isStatus(),
-                        c.getDataReserva(),
-                        c.getDataDevolucao(),
-
-                        new ClienteDTO(
-                                c.getCliente().getNome(),
-                                c.getCliente().getEmail(),
-                                c.getCliente().getTelefone(),
-                                c.getCliente().getEndereco()
-                        ),
-                        new LivroDTO(
-                                c.getLivro().getTitulo(),
-                                c.getLivro().getAutor(),
-                                c.getLivro().getQuantidade(),
-                                c.getLivro().getCategoria()
-                        )
-                ))
+                .map(reservaMapper::toResponseDTO) // 4. USAR O MAPPER (com Method Reference)
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public ReservaResponseDTO buscarReservaPorId(Long id) {
+        Reserva reserva = reservaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Reserva não encontrada com ID: " + id));
 
-    @Transactional
-    public ReservaResponseDTO buscarReservaById(Long id) {
-        Reserva c = reservaRepository.findById(id) // 'c' é a reserva encontrada
-                .orElseThrow(() -> new IllegalArgumentException("Reserva não encontrada com ID: " + id));
-
-        return new ReservaResponseDTO(
-                c.getReserva_id(),
-                c.isStatus(),
-                c.getDataReserva(),
-                c.getDataDevolucao(),
-                new ClienteDTO(
-                        c.getCliente().getNome(),
-                        c.getCliente().getEmail(),
-                        c.getCliente().getTelefone(),
-                        c.getCliente().getEndereco()
-                ),
-                new LivroDTO(
-                        c.getLivro().getTitulo(),
-                        c.getLivro().getAutor(),
-                        c.getLivro().getQuantidade(),
-                        c.getLivro().getCategoria()
-                )
-        );
+        // 3. USAR O MAPPER
+        return reservaMapper.toResponseDTO(reserva);
     }
 
-
     @Transactional
-    public ResponseEntity<String> excluirReserva(Long id) {
-        if (!reservaRepository.existsById(id)) {
-            throw new IllegalArgumentException("Reserva não encontrada com ID: " + id);
+    public ReservaResponseDTO AtualizarStatusReserva(Long id) {
+        Reserva reserva = reservaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Reserva não encontrada com ID: " + id));
+
+        Livro livro = reserva.getLivro();
+        int quantidadeAtual = livro.getQuantidade();
+
+        if (reserva.isStatus()) {
+            // Devolução
+            livro.setQuantidade(quantidadeAtual + 1);
+            reserva.setStatus(false);
+        } else {
+            // Reativação
+            if (quantidadeAtual <= 0) {
+                throw new IllegalArgumentException("Não é possível reativar a reserva. Livro com estoque esgotado.");
+            }
+            livro.setQuantidade(quantidadeAtual - 1);
+            reserva.setStatus(true);
         }
 
-        reservaRepository.deleteById(id);
-        return ResponseEntity.ok("Reserva excluída com sucesso!");
+        livroRepository.save(livro);
+        Reserva reservaAtualizada = reservaRepository.save(reserva);
+
+        // 3. USAR O MAPPER
+        return reservaMapper.toResponseDTO(reservaAtualizada);
+    }
+
+    @Transactional
+    public void excluirReservaPorId(Long id) {
+        Reserva reserva = reservaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Reserva não encontrada com ID: " + id));
+
+        if (reserva.isStatus()) {
+            Livro livro = reserva.getLivro();
+            livro.setQuantidade(livro.getQuantidade() + 1);
+            livroRepository.save(livro);
+        }
+
+        reservaRepository.delete(reserva);
     }
 
 

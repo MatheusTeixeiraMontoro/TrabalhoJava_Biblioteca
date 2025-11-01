@@ -48,9 +48,10 @@ public class ClienteService {
 
         return new ClienteDTO(
                 cliente.getNome(),
-                cliente.getEndereco(),
+                cliente.getEmail(),
                 cliente.getTelefone(),
-                cliente.getEmail()
+                cliente.getEndereco()  
+
         );
     }
 
@@ -79,5 +80,6 @@ public class ClienteService {
 
         clienteRepository.deleteById(id);
     }
+
 
 }
