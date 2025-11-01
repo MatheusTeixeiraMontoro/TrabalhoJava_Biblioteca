@@ -1,9 +1,11 @@
 package com.example.demo.dto;
 import java.time.LocalDateTime;
 
+// Garanta que o nome do campo seja este:
 public record EmprestimoDTO(
         Long clienteId,
         Long livroId,
-        LocalDateTime dataDevolucao) {
+        LocalDateTime dataDevolucaoPrevista // <-- O nome correto é este
+) {
 
 }

@@ -45,15 +45,12 @@ public class LivroController {
         return ResponseEntity.ok(livrosDisponiveis);
     }
 
-
-
     @PutMapping("/{id}")
     public ResponseEntity<LivroDTO> atualizarLivro(@PathVariable Long id, @Valid @RequestBody LivroDTO livroDTO) {
         LivroDTO livroAtualizado = livroService.atualizarLivro(id, livroDTO);
 
         return ResponseEntity.ok(livroAtualizado);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluirLivro(@PathVariable Long id) {

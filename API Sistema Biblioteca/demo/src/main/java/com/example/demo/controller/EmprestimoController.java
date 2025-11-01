@@ -18,20 +18,17 @@ public class EmprestimoController {
 
     private final EmprestimoService emprestimoService;
 
-
     @PostMapping
     public ResponseEntity<EmprestimoResponseDTO> criarEmprestimo(@RequestBody EmprestimoDTO emprestimoDto) {
         EmprestimoResponseDTO novoEmprestimo = emprestimoService.criarEmprestimo(emprestimoDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoEmprestimo);
     }
 
-
     @GetMapping
     public ResponseEntity<List<EmprestimoResponseDTO>> listarEmprestimos() {
-        List<EmprestimoResponseDTO> emprestimos = emprestimoService.consultaListaEmprestimo();
+        List<EmprestimoResponseDTO> emprestimos = emprestimoService.listarTodosEmprestimos();
         return ResponseEntity.ok(emprestimos);
     }
-
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<EmprestimoResponseDTO> atualizarStatus(
@@ -47,20 +44,17 @@ public class EmprestimoController {
         return ResponseEntity.ok(emprestimoAtualizado);
     }
 
-
     @GetMapping("/cliente/{clienteId}")
     public ResponseEntity<List<EmprestimoResponseDTO>> consultarPorCliente(@PathVariable Long clienteId) {
         List<EmprestimoResponseDTO> emprestimos = emprestimoService.consultarEmprestimosPorCliente(clienteId);
         return ResponseEntity.ok(emprestimos);
     }
 
-
     @GetMapping("/atrasados")
     public ResponseEntity<List<EmprestimoResponseDTO>> consultarAtrasados() {
         List<EmprestimoResponseDTO> atrasados = emprestimoService.consultarEmprestimosAtrasados();
         return ResponseEntity.ok(atrasados);
     }
-
 
     @PatchMapping("/{id}/devolver")
     public ResponseEntity<EmprestimoResponseDTO> devolverLivro(@PathVariable Long id) {

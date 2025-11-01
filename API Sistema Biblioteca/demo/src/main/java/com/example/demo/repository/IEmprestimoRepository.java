@@ -12,11 +12,9 @@ import java.util.List;
 @Repository
 public interface IEmprestimoRepository extends JpaRepository<Emprestimo, Long> {
 
-
     @Query("SELECT e FROM Emprestimo e WHERE e.cliente.cliente_id = :clienteId")
     List<Emprestimo> findEmprestimosByClienteId(@Param("clienteId") Long clienteId);
 
-
-    @Query("SELECT e FROM Emprestimo e WHERE e.status = true AND e.dataDevolucao < :dataAtual")
+    @Query("SELECT e FROM Emprestimo e WHERE e.status = true AND e.dataDevolucaoPrevista < :dataAtual")
     List<Emprestimo> findEmprestimosAtrasados(@Param("dataAtual") LocalDateTime dataAtual);
 }
