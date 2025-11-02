@@ -19,13 +19,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor // O Lombok injetará todos os 'final'
+@AllArgsConstructor
 public class ReservaService {
 
     private final IReservaRepository reservaRepository;
     private final IClienteRepository clienteRepository;
     private final ILivroRepository livroRepository;
-    private final ReservaMapper reservaMapper; // 2. INJETAR O MAPPER
+    private final ReservaMapper reservaMapper;
 
     @Transactional
     public ReservaResponseDTO criarReserva(ReservaDTO reservaDTO) {
@@ -47,11 +47,10 @@ public class ReservaService {
         reserva.setLivro(livro);
         reserva.setDataReserva(LocalDateTime.now());
         reserva.setStatus(true);
-        reserva.setDataDevolucao(reservaDTO.dataDevolucao()); // Mantém a data de devolução do DTO
+        reserva.setDataDevolucao(reservaDTO.dataDevolucao());
 
         Reserva reservaSalva = reservaRepository.save(reserva);
 
-        // 3. USAR O MAPPER
         return reservaMapper.toResponseDTO(reservaSalva);
     }
 
@@ -59,7 +58,7 @@ public class ReservaService {
     public List<ReservaResponseDTO> listarTodasReservas() {
         return reservaRepository.findAll()
                 .stream()
-                .map(reservaMapper::toResponseDTO) // 4. USAR O MAPPER (com Method Reference)
+                .map(reservaMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -68,7 +67,6 @@ public class ReservaService {
         Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Reserva não encontrada com ID: " + id));
 
-        // 3. USAR O MAPPER
         return reservaMapper.toResponseDTO(reserva);
     }
 
@@ -81,11 +79,9 @@ public class ReservaService {
         int quantidadeAtual = livro.getQuantidade();
 
         if (reserva.isStatus()) {
-            // Devolução
             livro.setQuantidade(quantidadeAtual + 1);
             reserva.setStatus(false);
         } else {
-            // Reativação
             if (quantidadeAtual <= 0) {
                 throw new IllegalArgumentException("Não é possível reativar a reserva. Livro com estoque esgotado.");
             }
@@ -96,7 +92,6 @@ public class ReservaService {
         livroRepository.save(livro);
         Reserva reservaAtualizada = reservaRepository.save(reserva);
 
-        // 3. USAR O MAPPER
         return reservaMapper.toResponseDTO(reservaAtualizada);
     }
 

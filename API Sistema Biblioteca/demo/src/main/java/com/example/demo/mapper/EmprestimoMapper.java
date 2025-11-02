@@ -38,9 +38,8 @@ public interface EmprestimoMapper {
     default LivroDTO toLivroDTO(Livro livro) {
         if (livro == null) return null;
 
-        // CORREÇÃO AQUI: Adicionado o livro_id como primeiro argumento
         return new LivroDTO(
-                livro.getLivro_id(), // <<< Argumento que estava faltando
+                livro.getLivro_id(),
                 livro.getTitulo(),
                 livro.getAutor(),
                 livro.getIsbn(),

@@ -1,14 +1,14 @@
 package com.example.demo.Entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "multa")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Multa {
@@ -17,21 +17,16 @@ public class Multa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long multa_id;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "emprestimo_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "emprestimo_id", nullable = false, unique = true)
     private Emprestimo emprestimo;
 
-    @NotNull
-    @DecimalMin(value = "0.0", inclusive = false)
     @Column(nullable = false)
     private BigDecimal valor;
 
-    @NotBlank
     @Column(nullable = false)
     private String status;
 
-    @Column
+    @Column(name = "data_pagamento")
     private LocalDateTime dataPagamento;
-
 }
