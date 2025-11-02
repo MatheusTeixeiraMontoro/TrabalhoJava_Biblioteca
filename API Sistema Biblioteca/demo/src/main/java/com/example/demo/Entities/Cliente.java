@@ -3,7 +3,8 @@ package com.example.demo.Entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+import java.util.List;
+
 @Entity
 @Table(name = "cliente")
 @Getter
@@ -17,7 +18,7 @@ public class Cliente {
     private Long cliente_id;
 
     @Column(nullable = false)
-    private String nome_cliente;
+    private String nome;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -28,4 +29,6 @@ public class Cliente {
     @Column
     private String endereco;
 
+    @OneToMany(mappedBy = "cliente")
+    private List<Reserva> reserva;
 }
