@@ -35,7 +35,6 @@ public class PagamentoService {
         return toResponseDTO(pagamentoSalvo);
     }
 
-    // Consultar Pagamentos por Cliente
     public List<PagamentoResponseDTO> consultarPagamentosPorCliente(Long clienteId) {
         if (!clienteRepository.existsById(clienteId)) {
             throw new IllegalArgumentException("Cliente não encontrado com o ID: " + clienteId);
@@ -45,7 +44,6 @@ public class PagamentoService {
                 .collect(Collectors.toList());
     }
 
-    // Atualizar Status de Pagamento
     public PagamentoResponseDTO atualizarStatus(Long id, PagamentoStatusUpdateDTO dto) {
         Pagamento pagamento = pagamentoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Pagamento não encontrado com o ID: " + id));

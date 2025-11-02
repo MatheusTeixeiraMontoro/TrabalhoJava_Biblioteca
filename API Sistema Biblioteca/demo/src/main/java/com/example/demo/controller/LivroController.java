@@ -32,7 +32,7 @@ public class LivroController {
 
     @GetMapping("/{id}")
     public ResponseEntity<LivroDTO> buscarLivroPorId(@PathVariable Long id) {
-        // @PathVariable "id" pega o valor da URL (ex: /api/livros/1)
+
         LivroDTO livro = livroService.buscarLivroPorId(id);
 
         return ResponseEntity.ok(livro);

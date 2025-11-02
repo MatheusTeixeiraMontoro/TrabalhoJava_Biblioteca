@@ -46,16 +46,12 @@ public class EmprestimoService {
         emprestimo.setDataEmprestimo(LocalDateTime.now());
         emprestimo.setStatus(true);
 
-        // AQUI ESTÁ A LINHA CORRETA, USANDO O CAMPO CORRETO DO DTO
         emprestimo.setDataDevolucaoPrevista(emprestimoDTO.dataDevolucaoPrevista());
 
         Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimo);
         return toResponseDTO(emprestimoSalvo);
     }
 
-    // ... (O resto dos seus métodos de service continuam aqui)
-
-    // Método privado para conversão
     private EmprestimoResponseDTO toResponseDTO(Emprestimo emprestimo) {
         Cliente cliente = emprestimo.getCliente();
         Livro livro = emprestimo.getLivro();
