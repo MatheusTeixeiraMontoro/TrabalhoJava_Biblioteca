@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.Entities.Livro;
+import com.example.demo.dto.LivroCadastroDTO;
 import com.example.demo.dto.LivroDTO;
 import com.example.demo.repository.ILivroRepository;
 import lombok.AllArgsConstructor;
@@ -17,15 +18,18 @@ public class LivroService {
     private final ILivroRepository livroRepository;
 
     @Transactional
-    public Livro criarLivro(LivroDTO livroDTO) {
+    public LivroDTO criarLivro(LivroCadastroDTO livroCadastroDTO) {
         Livro novoLivro = new Livro();
 
-        novoLivro.setTitulo(livroDTO.titulo());
-        novoLivro.setAutor(livroDTO.autor());
-        novoLivro.setIsbn(livroDTO.isbn());
-        novoLivro.setQuantidade(livroDTO.quantidade());
-        novoLivro.setCategoria(livroDTO.categoria());
-        return livroRepository.save(novoLivro);
+        novoLivro.setTitulo(livroCadastroDTO.titulo());
+        novoLivro.setAutor(livroCadastroDTO.autor());
+        novoLivro.setIsbn(livroCadastroDTO.isbn());
+        novoLivro.setQuantidade(livroCadastroDTO.quantidade());
+        novoLivro.setCategoria(livroCadastroDTO.categoria());
+
+        Livro livroSalvo = livroRepository.save(novoLivro);
+
+        return toDTO(livroSalvo);
     }
 
     public List<LivroDTO> listarTodosOsLivros() {

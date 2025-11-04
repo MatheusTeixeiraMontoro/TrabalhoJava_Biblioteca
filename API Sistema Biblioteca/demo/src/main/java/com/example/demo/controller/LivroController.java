@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.Entities.Livro;
+import com.example.demo.dto.LivroCadastroDTO;
 import com.example.demo.dto.LivroDTO;
 import com.example.demo.service.LivroService;
 import jakarta.validation.Valid;
@@ -19,8 +20,8 @@ public class LivroController {
     private final LivroService livroService;
 
     @PostMapping
-    public ResponseEntity<Livro> criarLivro(@RequestBody LivroDTO livroDTO) {
-        Livro livroSalvo = livroService.criarLivro(livroDTO);
+    public ResponseEntity<LivroDTO> criarLivro(@Valid @RequestBody LivroCadastroDTO livroCadastroDTO) {
+        LivroDTO livroSalvo = livroService.criarLivro(livroCadastroDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(livroSalvo);
     }
 
