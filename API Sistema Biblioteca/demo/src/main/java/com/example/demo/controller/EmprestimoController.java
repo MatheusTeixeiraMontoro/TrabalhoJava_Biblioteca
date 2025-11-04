@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.EmprestimoDTO;
 import com.example.demo.dto.EmprestimoResponseDTO;
 import com.example.demo.service.EmprestimoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@Tag(name = "Empréstimo", description = "Endpoints para gerenciamento de empréstimos")
 @RestController
 @RequestMapping("/api/emprestimos")
 @AllArgsConstructor

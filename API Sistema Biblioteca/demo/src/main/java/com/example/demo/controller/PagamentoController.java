@@ -4,6 +4,7 @@ import com.example.demo.dto.PagamentoCadastroDTO;
 import com.example.demo.dto.PagamentoResponseDTO;
 import com.example.demo.dto.PagamentoStatusUpdateDTO;
 import com.example.demo.service.PagamentoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Pagamento", description = "Endpoints para gerenciamento de pagamentos")
 @RestController
 @RequestMapping("/api/pagamentos")
 @AllArgsConstructor

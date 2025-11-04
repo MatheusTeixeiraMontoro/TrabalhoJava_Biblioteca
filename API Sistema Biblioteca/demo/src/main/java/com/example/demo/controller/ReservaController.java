@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.ReservaDTO;
 import com.example.demo.dto.ReservaResponseDTO;
 import com.example.demo.service.ReservaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Tag(name = "Reserva", description = "Endpoints para gerenciamento de reservas")
 @RestController
 @RequestMapping("/api/reservas")
 @AllArgsConstructor
