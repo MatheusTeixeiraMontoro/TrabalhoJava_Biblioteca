@@ -4,6 +4,7 @@ import com.example.demo.Entities.Cliente;
 import com.example.demo.dto.ClienteDTO;
 import com.example.demo.repository.IClienteRepository;
 import com.example.demo.service.ClienteService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Cliente", description = "Endpoints para gerenciamento de Clientes")
 @RestController
 @RequestMapping("api/clientes")
 @AllArgsConstructor

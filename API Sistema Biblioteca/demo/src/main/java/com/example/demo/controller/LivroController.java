@@ -4,6 +4,7 @@ import com.example.demo.Entities.Livro;
 import com.example.demo.dto.LivroCadastroDTO;
 import com.example.demo.dto.LivroDTO;
 import com.example.demo.service.LivroService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Livro", description = "Endpoints para gerenciamento de livros")
 @RestController
 @RequestMapping("/api/livros")
 @AllArgsConstructor

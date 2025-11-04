@@ -2,12 +2,14 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.MultaResponseDTO;
 import com.example.demo.service.MultaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Multa", description = "Endpoints para gerenciamento de multas")
 @RestController
 @RequestMapping("/api/multas")
 @AllArgsConstructor
