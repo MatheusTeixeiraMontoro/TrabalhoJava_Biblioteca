@@ -32,7 +32,7 @@ public class LivroController {
 
     @GetMapping("/{id}")
     public ResponseEntity<LivroDTO> buscarLivroPorId(@PathVariable Long id) {
-        // @PathVariable "id" pega o valor da URL (ex: /api/livros/1)
+
         LivroDTO livro = livroService.buscarLivroPorId(id);
 
         return ResponseEntity.ok(livro);
@@ -45,15 +45,12 @@ public class LivroController {
         return ResponseEntity.ok(livrosDisponiveis);
     }
 
-
-
     @PutMapping("/{id}")
     public ResponseEntity<LivroDTO> atualizarLivro(@PathVariable Long id, @Valid @RequestBody LivroDTO livroDTO) {
         LivroDTO livroAtualizado = livroService.atualizarLivro(id, livroDTO);
 
         return ResponseEntity.ok(livroAtualizado);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluirLivro(@PathVariable Long id) {

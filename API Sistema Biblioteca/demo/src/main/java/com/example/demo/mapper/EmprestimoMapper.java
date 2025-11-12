@@ -22,8 +22,6 @@ public interface EmprestimoMapper {
     @Mapping(source = "livro", target = "livro", qualifiedByName = "toLivroDTO")
     EmprestimoResponseDTO toResponse(Emprestimo emprestimo);
 
-
-
     @Named("toClienteDTO")
     default ClienteDTO toClienteDTO(Cliente cliente) {
         if (cliente == null) return null;
@@ -41,6 +39,7 @@ public interface EmprestimoMapper {
         if (livro == null) return null;
 
         return new LivroDTO(
+                livro.getLivro_id(),
                 livro.getTitulo(),
                 livro.getAutor(),
                 livro.getIsbn(),
